@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const Immediate = time.Duration(0)
+
 var ErrTimeout = errors.New("timeout")
 
 // KeyLock is a key-based lock structure for managing concurrency.

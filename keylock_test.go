@@ -63,6 +63,26 @@ func TestLockAndUnlock(t *testing.T) {
 	}
 }
 
+func TestImmediateLock(t *testing.T) {
+	kl := keylock.New()
+	key := "test-key"
+
+	unlock, err := kl.LockWithTimeout(key, keylock.Immediate)
+	if err != nil {
+		t.Errorf("Expected no error, got %v", err)
+	}
+	if unlock == nil {
+		t.Errorf("Expected unlock function, got nil")
+	}
+	defer unlock()
+
+	// the lock is already held, so this should fail
+	_, err = kl.LockWithTimeout(key, keylock.Immediate)
+	if err != keylock.ErrTimeout {
+		t.Errorf("Expected timeout error, got %v", err)
+	}
+}
+
 func TestLockWithTimeout(t *testing.T) {
 	kl := keylock.New()
 	key := "test-key"
